@@ -3,6 +3,7 @@ import click
 import logging
 import matplotlib
 import json
+import random
 import tqdm
 from mplsoccer.pitch import Pitch
 from pathlib import Path
@@ -113,8 +114,10 @@ def main(input_filepath, output_filepath):
 
         fig, ax = create_image(shot)
 
-        # TODO: assign shots to train/test sets at random
-        save_image(fig, image_filepath(shot, output_filepath, train=True))
+        # TODO: make test_proportion a function argument
+        test_proportion = 0.2
+        is_train = random.random() >= test_proportion
+        save_image(fig, image_filepath(shot, output_filepath, train=is_train))
         matplotlib.pyplot.close(fig)
 
 
