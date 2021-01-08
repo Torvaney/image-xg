@@ -111,11 +111,7 @@ def main(input_filepath, output_filepath):
             logger.warning(f'Skipping event {shot["id"]} (penalty)')
             continue
 
-        try:
-            fig, ax = create_image(shot)
-        except Exception as err:
-            print(shot)
-            raise err
+        fig, ax = create_image(shot)
 
         # TODO: assign shots to train/test sets at random
         save_image(fig, image_filepath(shot, output_filepath, train=True))
