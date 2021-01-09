@@ -63,6 +63,19 @@ def create_image(shot):
 
     fig, ax = init_pitch()
 
+    # Add shot "triangle" between shot and goalposts
+    shot_x, shot_y, *_ = shot['location']
+    post_x = 120
+    post_y1, post_y2 = (36, 44)
+    tri = matplotlib.pyplot.Polygon(
+        [[shot_x, shot_y],
+         [post_x, post_y1],
+         [post_x, post_y2]],
+        color='pink',
+        alpha=0.5
+    )
+    fig.gca().add_patch(tri)
+
     # Add the teammates
     x, y = extract_xy(freeze_frame, lambda x: x['teammate'])
     ax.scatter(x, y, color='red')
@@ -75,9 +88,8 @@ def create_image(shot):
     x, y = extract_xy(freeze_frame, lambda x: not x['teammate'] and is_gk(x))
     ax.scatter(x, y, color='green')
 
-    # Add the shooter/ball/shot location
-    x, y, *__ = shot['location']
-    ax.scatter(x, y, color='hotpink', marker=shot_marker(shot))
+    # Add the shooter/ball/shot location and metadata (body part)
+    ax.scatter(shot_x, shot_y, color='hotpink', marker=shot_marker(shot))
 
     return fig, ax
 
