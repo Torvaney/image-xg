@@ -91,6 +91,9 @@ def create_image(shot):
     # Add the shooter/ball/shot location and metadata (body part)
     ax.scatter(shot_x, shot_y, color='hotpink', marker=shot_marker(shot))
 
+    # Crop image to only include the attacking half
+    ax.set_xlim(55, 125)
+
     return fig, ax
 
 
