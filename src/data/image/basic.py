@@ -31,8 +31,8 @@ def create_image_shot_angle_only(shot):
         [[shot_x, shot_y],
          [post_x, post_y1],
          [post_x, post_y2]],
-        color='pink',
-        alpha=0.5
+        color='red',
+        alpha=1.0
     )
     fig.gca().add_patch(tri)
 
