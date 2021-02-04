@@ -1,4 +1,5 @@
 import matplotlib
+import matplotlib.pyplot as plt
 
 from src.data.image import common
 
@@ -28,7 +29,7 @@ def create_image(shot):
     shot_x, shot_y, *_ = shot['location']
     post_x = 120
     post_y1, post_y2 = (36, 44)
-    tri = matplotlib.pyplot.Polygon(
+    tri = plt.Polygon(
         [[shot_x, shot_y],
          [post_x, post_y1],
          [post_x, post_y2]],
@@ -42,11 +43,11 @@ def create_image(shot):
     ax.scatter(x, y, color='red')
 
     # Add the outfield opposition
-    x, y = common.extract_xy(freeze_frame, lambda x: not x['teammate'] and not is_gk(x))
+    x, y = common.extract_xy(freeze_frame, lambda x: not x['teammate'] and not common.is_gk(x))
     ax.scatter(x, y, color='blue')
 
     # Add the goalkeeper
-    x, y = common.extract_xy(freeze_frame, lambda x: not x['teammate'] and is_gk(x))
+    x, y = common.extract_xy(freeze_frame, lambda x: not x['teammate'] and common.is_gk(x))
     ax.scatter(x, y, color='green')
 
     # Add the shooter/ball/shot location and metadata (body part)

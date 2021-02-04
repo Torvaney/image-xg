@@ -2,7 +2,7 @@ from mplsoccer.pitch import Pitch
 
 
 def unzip(xs):
-    return zip(*xs)
+    return list(zip(*xs))
 
 
 def init_pitch():

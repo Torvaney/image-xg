@@ -8,7 +8,7 @@ import tqdm
 from pathlib import Path
 from dotenv import find_dotenv, load_dotenv
 
-from src.data.image import basic
+from src.data.image import basic, voronoi
 
 
 def is_data_file(f):
@@ -48,11 +48,6 @@ def main(input_filepath, output_filepath):
         with open(filepath, 'r') as shot_file:
             shot = json.load(shot_file)
 
-        # TODO: Add --refresh argument to regenerate all images
-        filepath = image_filepath(shot, output_filepath, train=True)
-        if filepath.exists():
-            continue
-
         if shot['shot']['type']['name'] == 'Penalty':
             logger.warning(f'Skipping event {shot["id"]} (penalty)')
             continue
@@ -63,14 +58,21 @@ def main(input_filepath, output_filepath):
 
         image_types = {
             'basic': basic.create_image,
+            'voronoi': voronoi.create_image_voronoi,
         }
-        for image_type, image_fn in image_types:
-            fig, ax = image_fn(shot)
-
-            image_dir = Path(output_filepath/image_type)
+        for image_type, image_fn in image_types.items():
+            image_dir = Path(output_filepath)/image_type
             image_dir.mkdir(parents=True, exist_ok=True)
 
-            save_image(fig, image_filepath(shot, image_dir, train=is_train))
+            # Skip image generation if the completed image exists already
+            # TODO: Add --refresh argument to regenerate all images
+            filepath = image_filepath(shot, image_dir, train=is_train)
+            if filepath.exists():
+                continue
+
+            fig, ax = image_fn(shot)
+
+            save_image(fig, filepath)
             matplotlib.pyplot.close(fig)
 
 
