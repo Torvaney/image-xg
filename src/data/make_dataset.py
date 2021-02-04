@@ -28,7 +28,7 @@ def image_filepath(shot, output_filepath, train=True):
 
 
 def save_image(fig, filepath):
-    fig.savefig(filepath, dpi=280)
+    fig.savefig(filepath, dpi=60)
 
 
 @click.command()
