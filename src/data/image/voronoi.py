@@ -31,10 +31,10 @@ def create_image_voronoi(shot):
     v = scipy.spatial.Voronoi([
         *xy,
         # Create a bounded voronoi by reflecting points in each axis
-        *reflect_x(xy, 120),
-        *reflect_x(xy, 0),
-        *reflect_y(xy, 80),
-        *reflect_y(xy, 0),
+        *reflect_x(xy, 121),
+        *reflect_x(xy, -1),
+        *reflect_y(xy, 81),
+        *reflect_y(xy, -1),
     ])
 
     fig, ax = common.init_pitch()
@@ -61,12 +61,12 @@ def create_image_voronoi(shot):
     # If we don't do this, shots right on top of the goal, and shots where
     # the shooter has no space look very similar (no white voronoi region)
     shot_x, shot_y, *__ = shot['location']
-    post_x = 120
+    post_x = 121
     post_y1, post_y2 = (36, 44)
     tri = plt.Polygon(
         [[shot_x, shot_y], [post_x, post_y1], [post_x, post_y2]],
-        color='white',
-        alpha=0.5
+        color='orange',
+        alpha=0.9
     )
     fig.gca().add_patch(tri)
 
