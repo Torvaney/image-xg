@@ -5,9 +5,10 @@ import matplotlib
 import json
 import random
 import tqdm
-from mplsoccer.pitch import Pitch
 from pathlib import Path
 from dotenv import find_dotenv, load_dotenv
+
+from src.data.image import basic
 
 
 def is_data_file(f):
@@ -24,77 +25,6 @@ def image_filepath(shot, output_filepath, train=True):
 
     filename = f'{shot["id"]}.png'
     return shot_dir/filename
-
-
-def unzip(xs):
-    return zip(*xs)
-
-
-def init_pitch():
-    pitch = Pitch(pitch_color=None, line_color='lightgray', stripe=False)
-    fig, ax = pitch.draw()
-    return fig, ax
-
-
-def is_gk(player):
-    return player['position']['name'] == 'Goalkeeper'
-
-
-def shot_marker(shot):
-    body_part = shot['shot']['body_part']['name']
-    if body_part == 'Right Foot':
-        return matplotlib.markers.CARETUP
-    if body_part == 'Left Foot':
-        return matplotlib.markers.CARETDOWN
-    if body_part == 'Head':
-        return 'P'
-    return 'P'
-
-
-def extract_xy(freeze_frame, condition=lambda x: True):
-    xy = [p['location'] for p in freeze_frame if condition(p)]
-    if len(xy) == 0:
-        return [], []
-    return unzip(xy)
-
-
-def create_image(shot):
-    freeze_frame = shot['shot']['freeze_frame']
-
-    fig, ax = init_pitch()
-
-    # Add shot "triangle" between shot and goalposts
-    shot_x, shot_y, *_ = shot['location']
-    post_x = 120
-    post_y1, post_y2 = (36, 44)
-    tri = matplotlib.pyplot.Polygon(
-        [[shot_x, shot_y],
-         [post_x, post_y1],
-         [post_x, post_y2]],
-        color='pink',
-        alpha=0.5
-    )
-    fig.gca().add_patch(tri)
-
-    # Add the teammates
-    x, y = extract_xy(freeze_frame, lambda x: x['teammate'])
-    ax.scatter(x, y, color='red')
-
-    # Add the outfield opposition
-    x, y = extract_xy(freeze_frame, lambda x: not x['teammate'] and not is_gk(x))
-    ax.scatter(x, y, color='blue')
-
-    # Add the goalkeeper
-    x, y = extract_xy(freeze_frame, lambda x: not x['teammate'] and is_gk(x))
-    ax.scatter(x, y, color='green')
-
-    # Add the shooter/ball/shot location and metadata (body part)
-    ax.scatter(shot_x, shot_y, color='hotpink', marker=shot_marker(shot))
-
-    # Crop image to only include the attacking half
-    ax.set_xlim(55, 125)
-
-    return fig, ax
 
 
 def save_image(fig, filepath):
@@ -127,13 +57,21 @@ def main(input_filepath, output_filepath):
             logger.warning(f'Skipping event {shot["id"]} (penalty)')
             continue
 
-        fig, ax = create_image(shot)
-
         # TODO: make test_proportion a function argument
         test_proportion = 0.2
         is_train = random.random() >= test_proportion
-        save_image(fig, image_filepath(shot, output_filepath, train=is_train))
-        matplotlib.pyplot.close(fig)
+
+        image_types = {
+            'basic': basic.create_image,
+        }
+        for image_type, image_fn in image_types:
+            fig, ax = image_fn(shot)
+
+            image_dir = Path(output_filepath/image_type)
+            image_dir.mkdir(parents=True, exist_ok=True)
+
+            save_image(fig, image_filepath(shot, image_dir, train=is_train))
+            matplotlib.pyplot.close(fig)
 
 
 if __name__ == '__main__':
