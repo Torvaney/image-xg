@@ -58,6 +58,7 @@ def main(input_filepath, output_filepath):
 
         image_types = {
             'basic': basic.create_image,
+            'triangle': basic.create_image_shot_angle_only,
             'voronoi': voronoi.create_image_voronoi,
         }
         for image_type, image_fn in image_types.items():

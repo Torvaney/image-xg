@@ -6,7 +6,7 @@ def unzip(xs):
 
 
 def init_pitch():
-    pitch = Pitch(pitch_color=None, line_color='lightgray', stripe=False)
+    pitch = Pitch(pitch_color=None, line_color='whitesmoke', stripe=False)
     fig, ax = pitch.draw()
     return fig, ax
 

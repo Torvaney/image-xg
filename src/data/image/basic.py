@@ -15,6 +15,33 @@ def shot_marker(shot):
     return 'P'
 
 
+def create_image_shot_angle_only(shot):
+    """
+    Create a basic freeze-frame plot with each player as a single point, and a
+    wedge showing the shot angle.
+    """
+
+    fig, ax = common.init_pitch()
+
+    # Add shot "triangle" between shot and goalposts
+    shot_x, shot_y, *_ = shot['location']
+    post_x = 120
+    post_y1, post_y2 = (36, 44)
+    tri = plt.Polygon(
+        [[shot_x, shot_y],
+         [post_x, post_y1],
+         [post_x, post_y2]],
+        color='pink',
+        alpha=0.5
+    )
+    fig.gca().add_patch(tri)
+
+    # Crop image to only include the attacking half
+    ax.set_xlim(55, 125)
+
+    return fig, ax
+
+
 def create_image(shot):
     """
     Create a basic freeze-frame plot with each player as a single point, and a
