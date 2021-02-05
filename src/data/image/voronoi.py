@@ -21,6 +21,17 @@ def get_region_colour(player):
         return 'green'
 
 
+def get_body_part_colour(shot):
+    body_part = shot['shot']['body_part']['name']
+    if body_part == 'Right Foot':
+        return 'orange'
+    if body_part == 'Left Foot':
+        return 'red'
+    if body_part == 'Head':
+        return 'magenta'
+    return 'magenta'
+
+
 def create_image_voronoi(shot):
     freeze_frame = shot['shot']['freeze_frame']
     xy = (
@@ -65,7 +76,7 @@ def create_image_voronoi(shot):
     post_y1, post_y2 = (36, 44)
     tri = plt.Polygon(
         [[shot_x, shot_y], [post_x, post_y1], [post_x, post_y2]],
-        color='orange',
+        color=get_body_part_colour(shot),
         alpha=0.9
     )
     fig.gca().add_patch(tri)

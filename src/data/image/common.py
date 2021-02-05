@@ -9,7 +9,7 @@ def init_pitch():
     pitch = Pitch(pitch_color=None, line_color='whitesmoke', stripe=False)
     fig, ax = pitch.draw()
 
-    # SB coordinates start on the left side, so we must invert the axes
+    # SB coordinates start on the left side, so we should invert the axes
     ax.invert_yaxis()
 
     return fig, ax
