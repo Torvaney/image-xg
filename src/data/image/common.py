@@ -24,3 +24,14 @@ def extract_xy(freeze_frame, condition=lambda x: True):
     if len(xy) == 0:
         return [], []
     return unzip(xy)
+
+
+def crop_to_half(ax):
+    ax.set_xlim(55, 125)
+    return ax
+
+
+def crop_to_penalty_box(ax):
+    ax.set_xlim(90, 125)
+    ax.set_ylim(16, 64)
+    return ax

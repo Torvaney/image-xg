@@ -99,8 +99,7 @@ def create_image_voronoi(shot):
     # ax.set_xlim(55, 125)
 
     # Crop image to only include the penalty box (ish)
-    ax.set_xlim(85, 125)
-    ax.set_ylim(16, 64)
+    ax = common.crop_to_penalty_box(ax)
 
     return fig, ax
 
@@ -140,7 +139,6 @@ def create_image_minimal_voronoi(shot):
         )
 
     # Crop image to only include the penalty box (ish)
-    ax.set_xlim(85, 125)
-    ax.set_ylim(16, 64)
+    ax = common.crop_to_penalty_box(ax)
 
     return fig, ax
