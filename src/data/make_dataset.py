@@ -60,6 +60,7 @@ def main(input_filepath, output_filepath):
             'basic': basic.create_image,
             'triangle': basic.create_image_shot_angle_only,
             'voronoi': voronoi.create_image_voronoi,
+            'minimal_voronoi': voronoi.create_image_minimal_voronoi,
         }
         for image_type, image_fn in image_types.items():
             image_dir = Path(output_filepath)/image_type

@@ -12,6 +12,17 @@ def reflect_y(xy, max_y=80):
     return [[x, (max_y + (max_y - y))] for x, y in xy]
 
 
+def bounded_voronoi(points, xlim=(-1, 121), ylim=(-1, 81)):
+    return scipy.spatial.Voronoi([
+        *points,
+        # Create a bounded voronoi by reflecting points in each axis
+        *reflect_x(points, xlim[0]),
+        *reflect_x(points, xlim[1]),
+        *reflect_y(points, ylim[0]),
+        *reflect_y(points, ylim[1]),
+    ])
+
+
 def get_region_colour(player):
     if player['teammate']:
         return 'pink'
@@ -32,41 +43,44 @@ def get_body_part_colour(shot):
     return 'magenta'
 
 
+def plot_voronoi_region(fig, voronoi, region_ix, **kwargs):
+    """ Add voronoi region to a plot (in-place). """
+    region = voronoi.regions[region_ix]
+    if (-1 in region) or (len(region) == 0):
+        return fig
+
+    region_xy = [list(voronoi.vertices[i]) for i in region]
+    plt_region = plt.Polygon(region_xy, **kwargs)
+    fig.gca().add_patch(plt_region)
+
+    return fig
+
+
 def create_image_voronoi(shot):
+    fig, ax = common.init_pitch()
+
+    # Create voronoi from freeze frame and shooter position
     freeze_frame = shot['shot']['freeze_frame']
     xy = (
         [shot['location'][0:2]] +
         common.unzip(common.extract_xy(freeze_frame))
     )
-
-    v = scipy.spatial.Voronoi([
-        *xy,
-        # Create a bounded voronoi by reflecting points in each axis
-        *reflect_x(xy, 121),
-        *reflect_x(xy, -1),
-        *reflect_y(xy, 81),
-        *reflect_y(xy, -1),
-    ])
-
-    fig, ax = common.init_pitch()
+    voronoi = bounded_voronoi(xy)
 
     # For each region with a corresponding player in the freeze-frame
     # (i.e. not the reflected points), get the associated voronoi region
     # and plot it
-    # Note that the shooter's region is not included here (hence point_region
-    # starts at index 1) and is left blank (white) in the final image
-    for player, region_ix in zip(freeze_frame, v.point_region[1:]):
-        region = v.regions[region_ix]
-        if (-1 in region) or (len(region) == 0):
-            continue
-
-        xy = [list(v.vertices[i]) for i in region]
-        plt_region = plt.Polygon(
-            xy,
+    # Note that the shooter's region is not included here (shooter is at index 0
+    # hence point_region starts at index 1) and is left blank (white) in the
+    # final image
+    for player, region_ix in zip(freeze_frame, voronoi.point_region[1:]):
+        fig = plot_voronoi_region(
+            fig,
+            voronoi,
+            region_ix,
             color=get_region_colour(player),
             alpha=0.5
         )
-        fig.gca().add_patch(plt_region)
 
     # Add shot angle overlaid on top of the voronoi regions
     # If we don't do this, shots right on top of the goal, and shots where
@@ -83,6 +97,45 @@ def create_image_voronoi(shot):
 
     # Crop image to only include the attacking half
     # ax.set_xlim(55, 125)
+
+    # Crop image to only include the penalty box (ish)
+    ax.set_xlim(85, 125)
+    ax.set_ylim(16, 64)
+
+    return fig, ax
+
+
+def create_image_minimal_voronoi(shot):
+    """
+    Create a voronoi plot using only shooter and GK locations
+    """
+    fig, ax = common.init_pitch()
+
+    # Calculate the voronoi regions
+    freeze_frame = shot['shot']['freeze_frame']
+    xy_shooter = shot['location'][0:2]
+    xy_gk = common.unzip(common.extract_xy(
+        freeze_frame, lambda x: not x['teammate'] and common.is_gk(x)
+    ))
+    voronoi = bounded_voronoi([xy_shooter, xy_gk])
+
+    # Plot the shooter's region
+    fig = plot_voronoi_region(
+        fig,
+        voronoi,
+        voronoi.point_region[0],
+        color=get_body_part_colour(shot),
+        alpha=0.5
+    )
+
+    # Plot the GK's region
+    fig = plot_voronoi_region(
+        fig,
+        voronoi,
+        voronoi.point_region[1],
+        color='green',
+        alpha=0.5
+    )
 
     # Crop image to only include the penalty box (ish)
     ax.set_xlim(85, 125)
