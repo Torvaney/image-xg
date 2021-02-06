@@ -58,8 +58,8 @@ def add_noise_to_coords(shot, loc=0, scale=1):
         p['location'] = add_noise_to_coord(*p['location'])
 
     # Apply noise to shooter
-    x, y, z = shot_noisy['location']
+    x, y, *z = shot_noisy['location']
     x, y = add_noise_to_coord(x, y)
-    shot_noisy['location'] = [x, y, z]
+    shot_noisy['location'] = [x, y] + z
 
     return shot_noisy
