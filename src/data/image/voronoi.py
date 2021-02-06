@@ -110,6 +110,14 @@ def create_image_voronoi_cropped(shot):
     return fig, ax
 
 
+def create_image_voronoi_noisy(shot):
+    """
+    Create a voronoi plot after applying noise to the xy coords
+    """
+    shot_noisy = add_noise_to_coords(shot)
+    return create_image_voronoi(shot)
+
+
 def create_image_minimal_voronoi(shot):
     """
     Create a voronoi plot using only shooter and GK locations
