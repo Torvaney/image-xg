@@ -35,3 +35,9 @@ def crop_to_penalty_box(ax):
     ax.set_xlim(90, 125)
     ax.set_ylim(16, 64)
     return ax
+
+
+def crop_to_six_yard_box(ax):
+    ax.set_xlim(105, 125)
+    ax.set_ylim(28, 52)
+    return ax

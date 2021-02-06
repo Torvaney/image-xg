@@ -104,6 +104,12 @@ def create_image_voronoi(shot):
     return fig, ax
 
 
+def create_image_voronoi_cropped(shot):
+    fig, ax = create_image_voronoi(shot)
+    common.crop_to_six_yard_box(ax)
+    return fig, ax
+
+
 def create_image_minimal_voronoi(shot):
     """
     Create a voronoi plot using only shooter and GK locations
