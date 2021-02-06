@@ -114,7 +114,7 @@ def create_image_minimal_voronoi(shot):
     # Calculate the voronoi regions
     freeze_frame = shot['shot']['freeze_frame']
     xy_shooter = shot['location'][0:2]
-    xy_gk = common.unzip(common.extract_xy(
+    xy_gk, *__ = common.unzip(common.extract_xy(
         freeze_frame, lambda x: not x['teammate'] and common.is_gk(x)
     ))
     voronoi = bounded_voronoi([xy_shooter, xy_gk])
