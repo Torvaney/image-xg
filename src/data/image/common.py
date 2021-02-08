@@ -63,3 +63,34 @@ def add_noise_to_coords(shot, loc=0, scale=1):
     shot_noisy['location'] = [x, y] + z
 
     return shot_noisy
+
+
+def get_player_colour(player):
+    """
+    Decide the colour of a plot element based on the freeze-frame player's
+    team and position.
+    """
+
+    if player['teammate']:
+        return 'pink'
+    if not player['teammate'] and not is_gk(player):
+        return 'skyblue'
+    if is_gk(player):
+        return 'green'
+
+
+def get_body_part_colour(shot):
+    """
+    Decide the colour of a plot element based on the shooter's body part.
+    """
+
+    body_part = shot['shot']['body_part']['name']
+    if body_part == 'Right Foot':
+        return 'orange'
+    if body_part == 'Left Foot':
+        return 'red'
+    if body_part == 'Head':
+        return 'magenta'
+
+    # Else, body part == "Other"
+    return 'cyan'
