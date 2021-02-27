@@ -3,9 +3,12 @@ import fastai.vision.all as vision
 
 def fit_model(data_loader, model_config):
     learn = vision.cnn_learner(data_loader, vision.resnet34)
-    learn.fit_one_cycle(*model_config[0])
+
+    metrics = [vision.error_rate, vision.accuracy]
+    learn.fit_one_cycle(*model_config[0], metrics=metrics)
     learn.unfreeze()
-    learn.fit_one_cycle(*model_config[1])
+    learn.fit_one_cycle(*model_config[1], metrics=metrics)
+
     return learn
 
 
