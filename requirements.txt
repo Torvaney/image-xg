@@ -12,6 +12,7 @@ psycopg2-binary>=2.8.5
 records
 tqdm
 fastai
+pandas
 
 # For image processing
 mplsoccer
