@@ -13,12 +13,12 @@ from src.models import image_xg
 
 
 MODEL_CONFIG = {
-    'basic': [(3, slice(1e-7, 1e-2)), (3, slice(1e-7, 1e-2))],
-    'triangle': [(3, slice(1e-7, 1e-2)), (3, slice(1e-7, 1e-2))],
-    'voronoi': [(3, slice(1e-7, 1e-2)), (3, slice(1e-7, 1e-2))],
-    'noisy_voronoi': [(3, slice(1e-7, 1e-2)), (3, slice(1e-7, 1e-2))],
-    'cropped_voronoi': [(3, slice(1e-7, 1e-2)), (3, slice(1e-7, 1e-2))],
-    'minimal_voronoi': [(3, slice(1e-7, 1e-2)), (3, slice(1e-7, 1e-2))],
+    'basic': [(5, slice(1e-7, 1e-2)), (3, slice(1e-7, 1e-2))],
+    'triangle': [(5, slice(1e-7, 1e-2)), (3, slice(1e-7, 1e-2))],
+    'voronoi': [(5, slice(1e-7, 1e-2)), (3, slice(1e-7, 1e-2))],
+    'noisy_voronoi': [(5, slice(1e-7, 1e-2)), (3, slice(1e-7, 1e-2))],
+    'cropped_voronoi': [(5, slice(1e-7, 1e-2)), (3, slice(1e-7, 1e-2))],
+    'minimal_voronoi': [(5, slice(1e-7, 1e-2)), (3, slice(1e-7, 1e-2))],
 }
 
 
@@ -37,13 +37,14 @@ def main(input_filepath, output_filepath):
             train='train',
             valid='test',
             bs=16,
-            shuffle_train=True
+            shuffle_train=True,
+            item_tfms=vision.Resize(256, method=vision.ResizeMethod.Squish)
         )
 
         logger.info(f'Fitting {image_type} model...')
         model = image_xg.fit_model(dls, model_config)
 
-        logger.info(f'Fit complete! Saving model...')
+        logger.info('Fit complete! Saving model...')
         model_path = Path(output_filepath)/f'{image_type}.pkl'
         image_xg.save_model(model, model_path)
 
