@@ -8,7 +8,7 @@ import tqdm
 from pathlib import Path
 from dotenv import find_dotenv, load_dotenv
 
-from fastai import vision
+import fastai.vision.all as vision
 from src.models import image_xg
 
 

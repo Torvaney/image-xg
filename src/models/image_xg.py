@@ -1,4 +1,4 @@
-from fastai import vision
+import fastai.vision.all as vision
 
 
 def fit_model(data_loader, model_config):
