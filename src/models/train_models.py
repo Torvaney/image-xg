@@ -30,6 +30,10 @@ def main(input_filepath, output_filepath):
     """
     logger = logging.getLogger(__name__)
     for image_type, model_config in MODEL_CONFIG.items():
+        model_path = Path(output_filepath)/f'{image_type}.pkl'
+        if model_path.exists():
+            logger.info(f'Model for {image_type} already exists. Skipping!')
+            continue
 
         img_dir = Path(input_filepath)/image_type
         dls = vision.ImageDataLoaders.from_folder(
@@ -45,7 +49,6 @@ def main(input_filepath, output_filepath):
         model = image_xg.fit_model(dls, model_config)
 
         logger.info('Fit complete! Saving model...')
-        model_path = Path(output_filepath)/f'{image_type}.pkl'
         image_xg.save_model(model, model_path)
 
 
