@@ -31,7 +31,7 @@ def create_image_shot_angle_only(shot):
         [[shot_x, shot_y],
          [post_x, post_y1],
          [post_x, post_y2]],
-        color='red',
+        color=common.get_body_part_colour(shot),
         alpha=1.0
     )
     fig.gca().add_patch(tri)
@@ -53,7 +53,10 @@ def create_image(shot):
 
     fig, ax = common.init_pitch()
 
-    # Add shot "triangle" between shot and goalposts
+    # Add shot "triangle" between shot location and goalposts
+    # This tells us the shot location, in a visually obvious way
+    # (hopefuly displaying as a triangle helps to differentiate shots where
+    # the view-of-goal is obscured)
     shot_x, shot_y, *_ = shot['location']
     post_x = 120
     post_y1, post_y2 = (36, 44)
@@ -61,8 +64,8 @@ def create_image(shot):
         [[shot_x, shot_y],
          [post_x, post_y1],
          [post_x, post_y2]],
-        color='pink',
-        alpha=0.5
+        color=common.get_body_part_colour(shot),
+        alpha=1
     )
     fig.gca().add_patch(tri)
 
@@ -77,9 +80,6 @@ def create_image(shot):
     # Add the goalkeeper
     x, y = common.extract_xy(freeze_frame, lambda x: not x['teammate'] and common.is_gk(x))
     ax.scatter(x, y, color='green')
-
-    # Add the shooter/ball/shot location and metadata (body part)
-    ax.scatter(shot_x, shot_y, color='hotpink', marker=shot_marker(shot))
 
     # Crop image to only include the attacking half
     ax = common.crop_to_half(ax)

@@ -23,26 +23,6 @@ def bounded_voronoi(points, xlim=(-1, 121), ylim=(-1, 81)):
     ])
 
 
-def get_region_colour(player):
-    if player['teammate']:
-        return 'pink'
-    if not player['teammate'] and not common.is_gk(player):
-        return 'skyblue'
-    if common.is_gk(player):
-        return 'green'
-
-
-def get_body_part_colour(shot):
-    body_part = shot['shot']['body_part']['name']
-    if body_part == 'Right Foot':
-        return 'orange'
-    if body_part == 'Left Foot':
-        return 'red'
-    if body_part == 'Head':
-        return 'magenta'
-    return 'magenta'
-
-
 def plot_voronoi_region(fig, voronoi, region_ix, **kwargs):
     """ Add voronoi region to a plot (in-place). """
     region = voronoi.regions[region_ix]
@@ -78,7 +58,7 @@ def create_image_voronoi(shot):
             fig,
             voronoi,
             region_ix,
-            color=get_region_colour(player),
+            color=common.get_player_colour(player),
             alpha=0.5
         )
 
@@ -90,7 +70,7 @@ def create_image_voronoi(shot):
     post_y1, post_y2 = (36, 44)
     tri = plt.Polygon(
         [[shot_x, shot_y], [post_x, post_y1], [post_x, post_y2]],
-        color=get_body_part_colour(shot),
+        color=common.get_body_part_colour(shot),
         alpha=0.9
     )
     fig.gca().add_patch(tri)
@@ -137,7 +117,7 @@ def create_image_minimal_voronoi(shot):
         fig,
         voronoi,
         voronoi.point_region[0],
-        color=get_body_part_colour(shot),
+        color=common.get_body_part_colour(shot),
         alpha=0.5
     )
 

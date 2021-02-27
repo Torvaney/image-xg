@@ -8,7 +8,7 @@ import tqdm
 from pathlib import Path
 from dotenv import find_dotenv, load_dotenv
 
-from src.data.image import basic, voronoi
+import src.data.image
 
 
 def is_data_file(f):
@@ -56,15 +56,7 @@ def main(input_filepath, output_filepath):
         test_proportion = 0.2
         is_train = random.random() >= test_proportion
 
-        image_types = {
-            'basic': basic.create_image,
-            'triangle': basic.create_image_shot_angle_only,
-            'voronoi': voronoi.create_image_voronoi,
-            'noisy_voronoi': voronoi.create_image_voronoi_noisy,
-            'cropped_voronoi': voronoi.create_image_voronoi_cropped,
-            'minimal_voronoi': voronoi.create_image_minimal_voronoi,
-        }
-        for image_type, image_fn in image_types.items():
+        for image_type, image_fn in src.data.image.IMAGE_TYPES.items():
             image_dir = Path(output_filepath)/image_type
             image_dir.mkdir(parents=True, exist_ok=True)
 
