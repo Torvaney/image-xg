@@ -15,6 +15,10 @@ def is_data_file(f):
     return Path(f).suffix == '.json'
 
 
+def is_penalty(shot):
+    return shot['shot']['type']['name'] == 'Penalty'
+
+
 def image_filepath(shot, output_filepath, train=True):
     """ Get the image file path from the shot (meta)data. """
     train_subdir = 'train' if train else 'test'
@@ -48,11 +52,11 @@ def main(input_filepath, output_filepath):
         with open(filepath, 'r') as shot_file:
             shot = json.load(shot_file)
 
-        if shot['shot']['type']['name'] == 'Penalty':
+        if is_penalty(shot):
             logger.warning(f'Skipping event {shot["id"]} (penalty)')
             continue
 
-        # TODO: make test_proportion a function argument
+        # TODO: make test_proportion a configurable function argument
         test_proportion = 0.2
         is_train = random.random() >= test_proportion
 
@@ -60,8 +64,7 @@ def main(input_filepath, output_filepath):
             image_dir = Path(output_filepath)/image_type
             image_dir.mkdir(parents=True, exist_ok=True)
 
-            # Skip image generation if the completed image exists already
-            # TODO: Add --refresh argument to regenerate all images
+            # Skip image generation if the completed image exists alread
             filepath = image_filepath(shot, image_dir, train=is_train)
             if filepath.exists():
                 continue
