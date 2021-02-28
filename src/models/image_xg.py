@@ -38,7 +38,7 @@ def predict_xg(model, img):
 def predict_batch_xg(model, dataloader):
     probs, _ = model.get_preds(dl=dataloader)
     xg = probs[:, 1]
-    return float(xg)
+    return xg.numpy()
 
 
 def save_model(model, path):
