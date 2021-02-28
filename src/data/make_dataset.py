@@ -64,14 +64,17 @@ def main(input_filepath, output_filepath):
             image_dir = Path(output_filepath)/image_type
             image_dir.mkdir(parents=True, exist_ok=True)
 
-            # Skip image generation if the completed image exists alread
-            filepath = image_filepath(shot, image_dir, train=is_train)
-            if filepath.exists():
+            # Skip image generation if the completed image exists already
+            # in either train or test directories
+            train_filepath = image_filepath(shot, image_dir, train=True)
+            test_filepath = image_filepath(shot, image_dir, train=False)
+            if train_filepath.exists() or test_filepath.exists():
                 continue
 
             fig, ax = image_fn(shot)
 
-            save_image(fig, filepath)
+            img_filepath = image_filepath(shot, image_dir, train=is_train)
+            save_image(fig, img_filepath)
             matplotlib.pyplot.close(fig)
 
 
