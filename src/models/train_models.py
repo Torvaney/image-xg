@@ -4,17 +4,16 @@ import logging
 from pathlib import Path
 from dotenv import find_dotenv, load_dotenv
 
-import fastai.vision.all as vision
 from src.models import image_xg
 
 
 MODEL_CONFIG = {
-    'basic': [(5, slice(1e-7, 1e-2)), (3, slice(1e-7, 1e-2))],
-    'triangle': [(5, slice(1e-7, 1e-2)), (3, slice(1e-7, 1e-2))],
-    'voronoi': [(5, slice(1e-7, 1e-2)), (3, slice(1e-7, 1e-2))],
-    'noisy_voronoi': [(5, slice(1e-7, 1e-2)), (3, slice(1e-7, 1e-2))],
-    'cropped_voronoi': [(5, slice(1e-7, 1e-2)), (3, slice(1e-7, 1e-2))],
-    'minimal_voronoi': [(5, slice(1e-7, 1e-2)), (3, slice(1e-7, 1e-2))],
+    'basic': [(5, slice(1e-6, 1e-2)), (3, slice(1e-7, 1e-6))],
+    'triangle': [(5, slice(1e-6, 1e-2)), (3, slice(1e-7, 1e-6))],
+    'voronoi': [(5, slice(1e-6, 1e-2)), (3, slice(1e-7, 1e-6))],
+    'noisy_voronoi': [(5, slice(1e-6, 1e-2)), (3, slice(1e-7, 1e-6))],
+    'cropped_voronoi': [(5, slice(1e-6, 1e-2)), (3, slice(1e-7, 1e-6))],
+    'minimal_voronoi': [(5, slice(1e-6, 1e-2)), (3, slice(1e-7, 1e-6))],
 }
 
 
