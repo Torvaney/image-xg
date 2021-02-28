@@ -46,6 +46,7 @@ def main(input_filepath, output_filepath):
     logger.info('Making image dataset from raw data')
 
     for filepath in tqdm.tqdm(list(Path(input_filepath).iterdir())):
+        logger.debug(f'Generating image files for {filepath}')
         if not is_data_file(filepath):
             continue
 
@@ -59,6 +60,7 @@ def main(input_filepath, output_filepath):
         # TODO: make test_proportion a configurable function argument
         test_proportion = 0.2
         is_train = random.random() >= test_proportion
+        logger.debug(f'Putting {shot["id"]} into {"train" if is_train else "test"} data')
 
         for image_type, image_fn in src.data.image.IMAGE_TYPES.items():
             image_dir = Path(output_filepath)/image_type
@@ -71,8 +73,10 @@ def main(input_filepath, output_filepath):
             if train_filepath.exists() or test_filepath.exists():
                 continue
 
+            logger.debug(f'Generating {image_type} image for {shot["id"]}')
             fig, ax = image_fn(shot)
 
+            logger.debug(f'Saving {image_type} image for {shot["id"]}')
             img_filepath = image_filepath(shot, image_dir, train=is_train)
             save_image(fig, img_filepath)
             matplotlib.pyplot.close(fig)
