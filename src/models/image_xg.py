@@ -1,4 +1,5 @@
-import fastai
+import fastai.metrics
+import fastai.vision.models
 
 
 def fit_model(data_loader, model_config):

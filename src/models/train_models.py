@@ -1,10 +1,6 @@
 # -*- coding: utf-8 -*-
 import click
 import logging
-import matplotlib
-import json
-import random
-import tqdm
 from pathlib import Path
 from dotenv import find_dotenv, load_dotenv
 

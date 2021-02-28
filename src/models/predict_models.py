@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 import click
-import fastai
+import fastai.vision.core
 import logging
 import pandas as pd
 import tqdm
 from pathlib import Path
 from dotenv import find_dotenv, load_dotenv
 
-from src.models import image_xg, predict_models
+from src.models import image_xg, train_models
 
 
 def event_id_from_path(img_path):
@@ -25,7 +25,7 @@ def main(image_filepath, model_filepath, output_filepath):
     logger = logging.getLogger(__name__)
 
     xg_values = []
-    for image_type, __ in predict_models.MODEL_CONFIG.items():
+    for image_type, __ in train_models.MODEL_CONFIG.items():
         model_path = Path(model_filepath)/f'{image_type}.pkl'
         model = image_xg.load_model(model_path)
 
