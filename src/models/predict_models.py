@@ -32,7 +32,7 @@ def main(image_filepath, model_filepath, output_filepath):
         logger.info(f'Generating predictions for {image_type} model...')
 
         img_dir = Path(image_filepath)/image_type/'test'
-        for img_path in tqdm.tqdm(list(img_dir.glob('**/*.png')):
+        for img_path in tqdm.tqdm(list(img_dir.glob('**/*.png'))):
             img = fastai.vision.core.PILImage.create(img_path)
             xg = image_xg.predict_xg(model, img)
 
