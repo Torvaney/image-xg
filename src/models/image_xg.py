@@ -1,12 +1,11 @@
-from pathlib import Path
-import fastai.vision.all as vision
+import fastai
 
 
 def fit_model(data_loader, model_config):
-    learn = vision.cnn_learner(
+    learn = fastai.vision.learner.cnn_learner(
         data_loader,
-        vision.resnet34,
-        metrics=[vision.error_rate, vision.accuracy]
+        fastai.vision.models.resnet34,
+        metrics=[fastai.metrics.error_rate, fastai.metrics.accuracy]
     )
 
     learn.fit_one_cycle(*model_config[0])
@@ -32,4 +31,4 @@ def save_model(model, path):
 
 
 def load_model(path):
-    return vision.load_learner(path)
+    return fastai.learner.load_learner(path)

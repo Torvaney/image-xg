@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 import click
+import fastai
 import logging
-import tqdm
 import pandas as pd
+import tqdm
 from pathlib import Path
 from dotenv import find_dotenv, load_dotenv
-from fastai import vision
 
 from src.models import image_xg, predict_models
 
@@ -33,7 +33,7 @@ def main(image_filepath, model_filepath, output_filepath):
 
         img_dir = Path(image_filepath)/image_type/'test'
         for img_path in tqdm.tqdm(list(img_dir.iterdir())):
-            img = vision.PILImage.create(img_path)
+            img = fastai.vision.core.PILImage.create(img_path)
             xg = image_xg.predict_xg(model, img)
 
             xg_values.append({
