@@ -1,3 +1,4 @@
+from pathlib import Path
 import fastai.vision.all as vision
 
 
@@ -22,7 +23,12 @@ def predict_xg(model, img):
 
 
 def save_model(model, path):
-    model.export(path)
+    previous_path = model.path
+
+    model.path = path.parent
+    model.export(path.name)
+
+    model.path = previous_path
 
 
 def load_model(path):
