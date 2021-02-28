@@ -50,5 +50,5 @@ def save_model(model, path):
     model.path = previous_path
 
 
-def load_model(path):
-    return fastai.learner.load_learner(path)
+def load_model(path, **kwargs):
+    return fastai.learner.load_learner(path, **kwargs)
