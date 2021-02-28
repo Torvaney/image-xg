@@ -36,8 +36,8 @@ def predict_xg(model, img):
 
 
 def predict_batch_xg(model, dataloader):
-    probs, _ = model.get_preds(dl=dataloader)
-    xg = probs[:, 1]
+    probs, _ = model.get_preds(dl=dataloader, reorder=False)
+    xg = probs[:, 0]
     return xg.numpy()
 
 
