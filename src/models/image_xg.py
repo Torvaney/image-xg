@@ -1,10 +1,23 @@
 import fastai.metrics
+import fastai.vision.augment
+import fastai.vision.data
 import fastai.vision.models
 
 
-def fit_model(data_loader, model_config):
+def get_dataloader(img_dir):
+    return fastai.vision.data.ImageDataLoaders.from_folder(
+        img_dir,
+        train='train',
+        valid='test',
+        bs=16,
+        shuffle_train=True,
+        item_tfms=fastai.vision.augment.Resize(256, method=fastai.vision.augment.ResizeMethod.Squish)
+    )
+
+
+def fit_model(dataloader, model_config):
     learn = fastai.vision.learner.cnn_learner(
-        data_loader,
+        dataloader,
         fastai.vision.models.resnet34,
         metrics=[fastai.metrics.error_rate, fastai.metrics.accuracy]
     )
@@ -19,6 +32,12 @@ def fit_model(data_loader, model_config):
 def predict_xg(model, img):
     _, _, probs = model.predict(img)
     xg, _ = probs
+    return float(xg)
+
+
+def predict_batch_xg(model, dataloader):
+    probs, _, _ = model.get_preds(dl=dataloader)
+    xg = probs[:, 1]
     return float(xg)
 
 

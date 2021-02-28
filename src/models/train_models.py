@@ -32,14 +32,7 @@ def main(input_filepath, output_filepath):
             continue
 
         img_dir = Path(input_filepath)/image_type
-        dls = vision.ImageDataLoaders.from_folder(
-            img_dir,
-            train='train',
-            valid='test',
-            bs=16,
-            shuffle_train=True,
-            item_tfms=vision.Resize(256, method=vision.ResizeMethod.Squish)
-        )
+        dls = image_xg.get_dataloader(img_dir)
 
         logger.info(f'Fitting {image_type} model...')
         model = image_xg.fit_model(dls, model_config)
