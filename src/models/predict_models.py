@@ -28,6 +28,7 @@ def main(image_filepath, model_filepath, output_filepath):
     for image_type, __ in train_models.MODEL_CONFIG.items():
         model_path = Path(model_filepath)/f'{image_type}.pkl'
         model = image_xg.load_model(model_path)
+        model.model.cuda()
 
         logger.info(f'Generating predictions for {image_type} model...')
 
