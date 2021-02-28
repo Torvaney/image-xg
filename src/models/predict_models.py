@@ -33,7 +33,7 @@ def main(image_filepath, model_filepath, output_filepath):
 
         img_type_dir = Path(image_filepath)/image_type
         img_paths = list((img_type_dir/'test').glob('**/*.png'))
-        dls = image_xg.get_dataloader(img_type_dir).test_dls(img_paths)
+        dls = image_xg.get_dataloader(img_type_dir).test_dl(img_paths)
         xgs = image_xg.predict_batch_xg(model, dls)
 
         for img_path, xg in zip(img_paths, xgs):
