@@ -8,11 +8,11 @@ from src.models import image_xg
 
 
 MODEL_CONFIG = {
-    'basic': (5, 5, 1e-3),
-    'triangle': (5, 5, 1e-3),
-    'voronoi': (5, 5, 1e-3),
-    'noisy_voronoi': (5, 5, 1e-3),
-    'minimal_voronoi': (5, 5, 1e-3),
+    'basic': (2, 5, 2e-2),
+    'voronoi': (2, 5, 2e-2),
+    'triangle': (10, 5, 1e-3),
+    'noisy_voronoi': (2, 5, 1e-3),
+    'minimal_voronoi': (10, 5, 1e-3),
     # 'bubbles': (5, 5, 1e-3),
     # 'cropped_voronoi': (5, 5, 1e-3),
 }
