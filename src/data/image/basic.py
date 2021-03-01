@@ -17,8 +17,7 @@ def shot_marker(shot):
 
 def create_image_shot_angle_only(shot):
     """
-    Create a basic freeze-frame plot with each player as a single point, and a
-    wedge showing the shot angle.
+    Create a basic plot with a wedge showing the shot angle.
     """
 
     fig, ax = common.init_pitch()
@@ -35,6 +34,45 @@ def create_image_shot_angle_only(shot):
         alpha=1.0
     )
     fig.gca().add_patch(tri)
+
+    # Crop image to only include the penalty box (ish)
+    ax.set_xlim(90, 125)
+    ax.set_ylim(16, 64)
+
+    return fig, ax
+
+
+def create_image_opponent_bubbles(shot):
+    """
+    Create a plot with a wedge showing the shot angle, the goalkeeper position,
+    and opponent outfield players who might be able to block an accurate shot
+    """
+
+    fig, ax = common.init_pitch()
+
+    # Add shot "triangle" between shot and goalposts
+    shot_x, shot_y, *_ = shot['location']
+    post_x = 120
+    post_y1, post_y2 = (36, 44)
+    tri = plt.Polygon(
+        [[shot_x, shot_y],
+         [post_x, post_y1],
+         [post_x, post_y2]],
+        color=common.get_body_part_colour(shot),
+        alpha=1.0
+    )
+    fig.gca().add_patch(tri)
+
+    # Layer over opposition players
+    x, y = common.extract_xy(shot['shot']['freeze_frame'], lambda x: not x['teammate'] and not common.is_gk(x))
+    for x_i, y_i in zip(x, y):
+        opp_circle = plt.Circle((x_i, y_i), 2, color='white', alpha=0.99)
+        ax.add_patch(opp_circle)
+
+    # Layer over goalkeeper
+    x, y = common.extract_xy(shot['shot']['freeze_frame'], lambda x: not x['teammate'] and common.is_gk(x))
+    gk_circle = plt.Circle((x, y), 3, color='green', alpha=1)
+    ax.add_patch(gk_circle)
 
     # Crop image to only include the penalty box (ish)
     ax.set_xlim(90, 125)
