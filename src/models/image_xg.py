@@ -1,6 +1,7 @@
 import fastai.metrics
 import fastai.vision.augment
 import fastai.vision.learner
+import fastai.vision.all
 import fastai.vision.data
 import fastai.vision.models
 
@@ -17,7 +18,7 @@ def get_dataloader(img_dir):
 
 
 def fit_model(dataloader, model_config):
-    learn = fastai.vision.learner.cnn_learner(
+    learn = fastai.vision.all.cnn_learner(
         dataloader,
         fastai.vision.models.resnet34,
         metrics=[fastai.metrics.error_rate, fastai.metrics.accuracy]
