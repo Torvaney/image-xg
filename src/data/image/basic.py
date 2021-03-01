@@ -66,7 +66,7 @@ def create_image_opponent_bubbles(shot):
     # Layer over opposition players
     x, y = common.extract_xy(shot['shot']['freeze_frame'], lambda x: not x['teammate'] and not common.is_gk(x))
     for x_i, y_i in zip(x, y):
-        opp_circle = plt.Circle((x_i, y_i), 2, color='white', alpha=0.99)
+        opp_circle = plt.Circle((x_i, y_i), 2, color='lightgray', alpha=0.9)
         ax.add_patch(opp_circle)
 
     # Layer over goalkeeper
