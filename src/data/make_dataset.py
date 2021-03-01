@@ -69,7 +69,7 @@ def main(input_filepath, output_filepath):
         test_proportion=0.2  # TODO: make configurable
     )
 
-    for filepath in tqdm.tqdm(list(Path(input_filepath).iterdir())[0:10]):
+    for filepath in tqdm.tqdm(list(Path(input_filepath).iterdir())):
         logger.debug(f'Generating image files for {filepath}')
         if not is_data_file(filepath):
             continue
