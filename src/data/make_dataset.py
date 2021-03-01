@@ -102,9 +102,9 @@ def main(input_filepath, output_filepath):
             save_image(fig, img_filepath)
             matplotlib.pyplot.close(fig)
 
-    logger.debug(f'Saving updated train/test splits at {train_test_filepath}')
-    with open(train_test_filepath, 'w+') as f:
-        json.dump(train_test_split, f)
+            logger.debug(f'Saving updated train/test splits at {train_test_filepath}')
+            with open(train_test_filepath, 'w+') as f:
+                json.dump(train_test_split, f)
 
 
 if __name__ == '__main__':
