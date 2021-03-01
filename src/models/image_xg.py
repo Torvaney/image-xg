@@ -1,5 +1,6 @@
 import fastai.metrics
 import fastai.vision.augment
+import fastai.vision.learner
 import fastai.vision.data
 import fastai.vision.models
 
