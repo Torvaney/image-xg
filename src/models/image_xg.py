@@ -24,10 +24,8 @@ def fit_model(dataloader, model_config):
         metrics=[fastai.metrics.error_rate, fastai.metrics.accuracy]
     )
 
-    learn.fit_one_cycle(*model_config[0])
-    learn.unfreeze()
-    learn.fit_one_cycle(*model_config[1])
-
+    epochs, freeze_epochs, lr = model_config
+    learn.fine_tune(epochs, freeze_epochs=freeze_epochs, base_lr=lr)
     return learn
 
 

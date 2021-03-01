@@ -8,13 +8,13 @@ from src.models import image_xg
 
 
 MODEL_CONFIG = {
-    'basic': [(10, slice(1e-6, 1e-2)), (5, slice(1e-7, 1e-6))],
-    'triangle': [(5, slice(1e-6, 1e-2)), (3, slice(1e-7, 1e-6))],
-    'voronoi': [(10, slice(1e-6, 1e-2)), (5, slice(1e-7, 1e-6))],
-    'noisy_voronoi': [(5, slice(1e-6, 1e-2)), (3, slice(1e-7, 1e-6))],
-    'minimal_voronoi': [(5, slice(1e-6, 1e-2)), (3, slice(1e-7, 1e-6))],
-    # 'bubbles': [(5, slice(1e-6, 1e-2)), (3, slice(1e-7, 1e-6))],
-    # 'cropped_voronoi': [(5, slice(1e-6, 1e-2)), (3, slice(1e-7, 1e-6))],
+    'basic': (5, 5, 1e-3),
+    'triangle': (5, 5, 1e-3),
+    'voronoi': (5, 5, 1e-3),
+    'noisy_voronoi': (5, 5, 1e-3),
+    'minimal_voronoi': (5, 5, 1e-3),
+    # 'bubbles': (5, 5, 1e-3),
+    # 'cropped_voronoi': (5, 5, 1e-3),
 }
 
 
