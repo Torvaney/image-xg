@@ -71,8 +71,9 @@ def create_image_opponent_bubbles(shot):
 
     # Layer over goalkeeper
     x, y = common.extract_xy(shot['shot']['freeze_frame'], lambda x: not x['teammate'] and common.is_gk(x))
-    gk_circle = plt.Circle((x, y), 3, color='green', alpha=1)
-    ax.add_patch(gk_circle)
+    if len(x) > 0:
+        gk_circle = plt.Circle((x, y), 3, color='green', alpha=1)
+        ax.add_patch(gk_circle)
 
     # Crop image to only include the penalty box (ish)
     ax.set_xlim(90, 125)

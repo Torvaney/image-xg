@@ -75,9 +75,6 @@ def create_image_voronoi(shot):
     )
     fig.gca().add_patch(tri)
 
-    # Crop image to only include the attacking half
-    # ax.set_xlim(55, 125)
-
     # Crop image to only include the penalty box (ish)
     ax = common.crop_to_penalty_box(ax)
 
