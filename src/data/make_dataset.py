@@ -69,6 +69,9 @@ def main(input_filepath, output_filepath):
         test_proportion=0.2  # TODO: make configurable
     )
 
+    # Create a mapping of shot ID: xg for pretraining on xG values
+    xg_map = {}
+
     for filepath in tqdm.tqdm(list(Path(input_filepath).iterdir())):
         logger.debug(f'Generating image files for {filepath}')
         if not is_data_file(filepath):
@@ -80,6 +83,9 @@ def main(input_filepath, output_filepath):
         if is_penalty(shot):
             logger.warning(f'Skipping event {shot["id"]} (penalty)')
             continue
+
+        # Add shot's xG value to the mapping
+        xg_map[str(shot['id'])] = shot['shot']['statsbomb_xg']
 
         is_train = train_test_split[str(shot['id'])]
         logger.debug(f'Putting {shot["id"]} into {"training" if is_train else "test"} data')
@@ -105,6 +111,10 @@ def main(input_filepath, output_filepath):
             logger.debug(f'Saving updated train/test splits at {train_test_filepath}')
             with open(train_test_filepath, 'w+') as f:
                 json.dump(train_test_split, f)
+
+    logger.debug('Saving shot:xG mapping')
+    with open(Path(output_filepath)/'xg_map.json', 'w+') as f:
+        json.dump(xg_map, f)
 
 
 if __name__ == '__main__':

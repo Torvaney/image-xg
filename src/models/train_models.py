@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import click
 import logging
+import json
 from pathlib import Path
 from dotenv import find_dotenv, load_dotenv
 
@@ -25,6 +26,11 @@ def main(input_filepath, output_filepath):
     """ Fits models on freeze-frame images (saved in ../processed).
     """
     logger = logging.getLogger(__name__)
+
+    # Load xG map
+    with open(Path(input_filepath)/'xg_map.json', 'r') as f:
+        xg_map = json.load(f)
+
     for image_type, model_config in MODEL_CONFIG.items():
         model_path = Path(output_filepath)/f'{image_type}.pkl'
         if model_path.exists():
@@ -32,7 +38,8 @@ def main(input_filepath, output_filepath):
             continue
 
         img_dir = Path(input_filepath)/image_type
-        dls = image_xg.get_dataloader(img_dir)
+        # dls = image_xg.get_dataloader(img_dir)
+        dls = image_xg.get_xg_dataloader(img_dir, xg_map=xg_map)
 
         logger.info(f'Fitting {image_type} model...')
         model = image_xg.fit_model(dls, model_config)
